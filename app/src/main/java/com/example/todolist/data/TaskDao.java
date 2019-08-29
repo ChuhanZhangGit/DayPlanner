@@ -4,10 +4,10 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.TypeConverter;
 import androidx.room.Update;
 
-import java.time.LocalDateTime;
+import org.threeten.bp.LocalTime;
+
 import java.util.List;
 
 @Dao
@@ -17,7 +17,7 @@ public interface TaskDao {
     List<TaskInDay> getAllTasks();
 
     @Query("SELECT * FROM taskInDay WHERE timeInDay = :dateTime LIMIT 1")
-    TaskInDay getTaskAtTime(LocalDateTime dateTime);
+    TaskInDay getTaskAtTime(LocalTime dateTime);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(TaskInDay task);
@@ -25,7 +25,8 @@ public interface TaskDao {
     @Update
     void updateTaskInDay(TaskInDay task);
 
-    @Query("DELETE ")
+    @Query("DELETE FROM taskInDay WHERE ")
+    void deleteTaskAtTime(LocalTime localTime);
 
     @Query("DELETE FROM taskInDay")
     void deleteAll();

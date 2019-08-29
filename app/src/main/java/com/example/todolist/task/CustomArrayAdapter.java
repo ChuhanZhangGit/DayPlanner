@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.example.todolist.task;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.example.todolist.R;
 
 public class CustomArrayAdapter extends ArrayAdapter {
 

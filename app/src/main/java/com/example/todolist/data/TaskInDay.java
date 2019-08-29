@@ -7,8 +7,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+
 
 @Entity(tableName = "taskInDay",
         foreignKeys = @ForeignKey(entity = Days.class, parentColumns = "date",
@@ -19,7 +20,7 @@ public class TaskInDay {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "timeInDay")
-    private LocalDateTime taskTime;
+    private LocalTime taskTime;
 
 
     @Nullable
@@ -29,7 +30,7 @@ public class TaskInDay {
     @ColumnInfo(name = "dateOfTask")
     private LocalDate taskDate;
 
-    public TaskInDay(@NonNull LocalDateTime taskTime, @Nullable String taskDescription,
+    public TaskInDay(@NonNull LocalTime taskTime, @Nullable String taskDescription,
                      LocalDate taskDate) {
         this.taskTime = taskTime;
         this.taskDescription = taskDescription;
@@ -37,7 +38,7 @@ public class TaskInDay {
     }
 
     @NonNull
-    public LocalDateTime getTaskTime() {
+    public LocalTime getTaskTime() {
         return taskTime;
     }
 

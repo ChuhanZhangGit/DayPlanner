@@ -2,18 +2,18 @@ package com.example.todolist.data;
 
 import androidx.room.TypeConverter;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
 
 public class DateConverter {
-    private LocalDate localDate =  LocalDate.of(1,2,2);
     @TypeConverter
-    public static LocalDate fromTimestamp(Long value) {
-        return value == null ? null : new LocalDate(value);
+    public static LocalDate fromTimestamp(String dateString) {
+        return dateString == null ? null : LocalDate.parse(dateString);
     }
 
     @TypeConverter
-    public static Long dateToTimestamp(LocalDate date) {
-        return date == null ? null : date.getTime();
+    public static String dateToTimestamp(LocalDate date) {
+        return date == null ? null : date.toString();
     }
-}
+
 }

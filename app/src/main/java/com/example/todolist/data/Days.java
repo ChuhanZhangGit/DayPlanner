@@ -6,7 +6,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
 
 @Entity(tableName = "days")
 public class Days {

@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.example.todolist.task;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.todolist.R;
 
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class TasksActivity extends AppCompatActivity implements AdapterView.OnIt
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.acitivity_tasks);
+//        setContentView(R.layout.activity_tasks);
 //
 //        itemEntry = findViewById(R.id.item_edit_text);
 //        addButton = findViewById(R.id.add_button);
@@ -55,7 +57,7 @@ public class TasksActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acitivity_tasks);
+        setContentView(R.layout.activity_tasks);
 
         itemEntry = findViewById(R.id.item_edit_text);
         addButton = findViewById(R.id.add_button);
