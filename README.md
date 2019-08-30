@@ -1,1 +1,7 @@
 # AndoirdToDoList
+
+## To dos 
+1. dateOfTask column references a foreign key but it is not part of an index. This may trigger full table scans whenever parent table is modified so you are highly advised to create an index that covers this column.  
+   Remember to optimize the foreign key implementation of the one to many relation. 
+
+2. Write method to input and retrieve data from DAO.

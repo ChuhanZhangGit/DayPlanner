@@ -11,7 +11,7 @@ import org.threeten.bp.LocalDate;
 import java.util.List;
 
 @Dao
-public interface DaysDao {
+public interface  DaysDao {
 
     @Query("SELECT * FROM days")
     List<Days> getAllDaysInDataBase();

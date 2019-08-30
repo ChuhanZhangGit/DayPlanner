@@ -25,7 +25,7 @@ public interface TaskDao {
     @Update
     void updateTaskInDay(TaskInDay task);
 
-    @Query("DELETE FROM taskInDay WHERE ")
+    @Query("DELETE FROM taskInDay WHERE timeInDay =:localTime")
     void deleteTaskAtTime(LocalTime localTime);
 
     @Query("DELETE FROM taskInDay")

@@ -1,21 +1,19 @@
 package com.example.todolist.task;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.todolist.R;
 
 import java.util.ArrayList;
 
-public class TasksActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class TasksActivity extends AppCompatActivity {
 
     private EditText itemEntry;
     private Button addButton;
@@ -24,7 +22,6 @@ public class TasksActivity extends AppCompatActivity implements AdapterView.OnIt
     private ArrayList<String> items;
     private ArrayAdapter<String> adapter;
 
-    private CustomArrayAdapter arrayAdapter;
 
     String[] taskTimeArray = {"Octopus","Pig","Sheep","Rabbit","Snake","Spider" };
 
@@ -37,7 +34,13 @@ public class TasksActivity extends AppCompatActivity implements AdapterView.OnIt
             "Scary."
     };
 
-//    @Override
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tasks);
+    }
+
+    //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_tasks);
@@ -54,37 +57,37 @@ public class TasksActivity extends AppCompatActivity implements AdapterView.OnIt
 //        addButton.setOnClickListener(this);
 //    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tasks);
-
-        itemEntry = findViewById(R.id.item_edit_text);
-        addButton = findViewById(R.id.add_button);
-        taskListView = findViewById(R.id.task_list_view);
-        arrayAdapter = new CustomArrayAdapter(this, taskTimeArray, taskContentArray);
-
-        taskListView.setAdapter(arrayAdapter);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        items.remove(i);
-        adapter.notifyDataSetChanged();
-        FileHelper.writeEntry(items, this);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.add_button:
-                String itemEntered = itemEntry.getText().toString();
-                adapter.add(itemEntered);
-                itemEntry.setText("");
-                FileHelper.writeEntry(items, TasksActivity.this);
-
-                Toast.makeText(TasksActivity.this, "Item added", Toast.LENGTH_SHORT).show();
-                adapter.notifyDataSetChanged();
-        }
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_tasks);
+//
+//        itemEntry = findViewById(R.id.item_edit_text);
+//        addButton = findViewById(R.id.add_button);
+//        taskListView = findViewById(R.id.task_list_view);
+//        arrayAdapter = new CustomArrayAdapter(this, taskTimeArray, taskContentArray);
+//
+//        taskListView.setAdapter(arrayAdapter);
+//    }
+//
+//    @Override
+//    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//        items.remove(i);
+//        adapter.notifyDataSetChanged();
+//        FileHelper.writeEntry(items, this);
+//    }
+//
+//    @Override
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.add_button:
+//                String itemEntered = itemEntry.getText().toString();
+//                adapter.add(itemEntered);
+//                itemEntry.setText("");
+//                FileHelper.writeEntry(items, TasksActivity.this);
+//
+//                Toast.makeText(TasksActivity.this, "Item added", Toast.LENGTH_SHORT).show();
+//                adapter.notifyDataSetChanged();
+//        }
+//    }
 }

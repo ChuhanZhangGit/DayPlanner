@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import org.threeten.bp.LocalDate;
 
 
-@Entity(tableName = "days")
+@Entity(tableName = "days",
+        indices = {@Index(value = "date", unique = true, name = "dateIndex")})
 public class Days {
     @PrimaryKey
     @NonNull
@@ -29,7 +31,13 @@ public class Days {
         return date;
     }
 
-    public int getTasksCompleted() {
+
+    @Nullable
+    public int getNumCompleted() {
         return numCompleted;
+    }
+
+    public void setNumCompleted(int numCompleted) {
+        this.numCompleted = numCompleted;
     }
 }

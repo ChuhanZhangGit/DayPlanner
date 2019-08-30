@@ -22,11 +22,11 @@ public class TaskInDay {
     @ColumnInfo(name = "timeInDay")
     private LocalTime taskTime;
 
-
     @Nullable
     @ColumnInfo(name = "taskDescription")
     private String taskDescription;
 
+    @NonNull
     @ColumnInfo(name = "dateOfTask")
     private LocalDate taskDate;
 
@@ -41,9 +41,17 @@ public class TaskInDay {
     public LocalTime getTaskTime() {
         return taskTime;
     }
+    
+
+    @NonNull
+    public LocalDate getTaskDate() {
+        return taskDate;
+    }
 
     @Nullable
     public String getTaskDescription() {
         return taskDescription;
     }
+
+
 }
