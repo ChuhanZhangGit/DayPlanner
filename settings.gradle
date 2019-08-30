@@ -1,2 +1,2 @@
-include ':app'
-rootProject.name='ToDoList'
+include ':app', ':testJava'
+rootProject.name='HourlyPlanner'
