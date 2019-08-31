@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hourlyplanner.R;
-import com.example.hourlyplanner.data.PlannerDataBase;
+import com.example.hourlyplanner.data.local.PlannerDataBase;
 
 public class SlotsListActivity extends AppCompatActivity {
 

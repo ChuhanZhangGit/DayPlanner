@@ -1,4 +1,4 @@
-package com.example.hourlyplanner.data;
+package com.example.hourlyplanner.data.local;
 
 import android.content.Context;
 
@@ -6,6 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+
+import com.example.hourlyplanner.data.Days;
+import com.example.hourlyplanner.data.SlotInDay;
 
 
 @Database(entities = {Days.class, SlotInDay.class}, version = 1)
@@ -16,7 +19,7 @@ public abstract class PlannerDataBase extends RoomDatabase {
 
     public abstract DaysDao daysDao();
 
-    public abstract SlotDao taskDao();
+    public abstract SlotDao slotsDao();
 
     private static final String DB_NAME = "planner.db";
 

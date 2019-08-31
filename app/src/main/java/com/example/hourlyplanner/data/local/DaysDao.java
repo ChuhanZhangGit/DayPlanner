@@ -1,10 +1,12 @@
-package com.example.hourlyplanner.data;
+package com.example.hourlyplanner.data.local;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.example.hourlyplanner.data.Days;
 
 import org.threeten.bp.LocalDate;
 

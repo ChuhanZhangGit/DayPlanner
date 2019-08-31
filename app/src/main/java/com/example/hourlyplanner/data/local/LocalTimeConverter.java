@@ -1,4 +1,4 @@
-package com.example.hourlyplanner.data;
+package com.example.hourlyplanner.data.local;
 
 import androidx.room.TypeConverter;
 

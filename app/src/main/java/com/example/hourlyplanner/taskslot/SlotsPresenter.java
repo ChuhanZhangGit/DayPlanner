@@ -2,10 +2,7 @@ package com.example.hourlyplanner.taskslot;
 
 import android.util.Log;
 
-import com.example.hourlyplanner.data.Days;
-import com.example.hourlyplanner.data.DaysDao;
-import com.example.hourlyplanner.data.PlannerDataBase;
-import com.example.hourlyplanner.data.SlotDao;
+import com.example.hourlyplanner.data.PlannerRepository;
 import com.example.hourlyplanner.data.SlotInDay;
 
 import org.threeten.bp.LocalDate;
@@ -15,11 +12,11 @@ import java.util.List;
 
 public class SlotsPresenter implements SlotsContract.Presenter {
 
-    private final PlannerDataBase dataBase;
+    private final PlannerRepository plannerRepo;
     private final SlotsContract.Fragment view;
 
-    public SlotsPresenter(PlannerDataBase dataBase, SlotsContract.Fragment view) {
-        this.dataBase = dataBase;
+    public SlotsPresenter(PlannerRepository plannerRepo, SlotsContract.Fragment view) {
+        this.plannerRepo = plannerRepo;
         this.view = view;
 
         view.setPresenter(this);
@@ -28,8 +25,7 @@ public class SlotsPresenter implements SlotsContract.Presenter {
 
     @Override
     public void loadSlotsInDay() {
-        SlotDao slotDao = dataBase.taskDao();
-        DaysDao daysDao = dataBase.daysDao();
+
 
 
         LocalDate someDate = LocalDate.of(2019, 1,1);
@@ -37,13 +33,13 @@ public class SlotsPresenter implements SlotsContract.Presenter {
         LocalTime start = LocalTime.of( 8,30,0) ;
         LocalTime stop = LocalTime.of( 17 , 0 , 0 ) ;
 
+        plannerRepo.insertDate(someDate);
 
-        daysDao.addNewDayToDataBase(new Days(someDate));
 
 
         LocalTime iterator = start;
         while ( iterator.isBefore( stop ) ) {
-            slotDao.insert(new SlotInDay(iterator, taskDescription, someDate));
+            plannerRepo.insertTimeSlot(new SlotInDay(iterator, taskDescription, someDate));
             // Set up the next loop.
             iterator = iterator.plusMinutes(30);
         }

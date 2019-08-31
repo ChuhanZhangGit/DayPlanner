@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import org.threeten.bp.LocalDate;
@@ -13,7 +14,8 @@ import org.threeten.bp.LocalTime;
 
 @Entity(tableName = "slotInDay",
         foreignKeys = @ForeignKey(entity = Days.class, parentColumns = "date",
-                childColumns = "dateOfTask", onDelete = ForeignKey.CASCADE))
+                childColumns = "dateOfTask", onDelete = ForeignKey.CASCADE),
+        indices = {@Index(value = "dateOfTask", unique = true, name = "slotDayIndex")})
 public class SlotInDay {
 
 
@@ -51,6 +53,10 @@ public class SlotInDay {
     @Nullable
     public String getTaskDescription() {
         return taskDescription;
+    }
+
+    public void setTaskDescription(@Nullable String taskDescription) {
+        this.taskDescription = taskDescription;
     }
 
 
