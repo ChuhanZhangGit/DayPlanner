@@ -24,8 +24,11 @@ public abstract class PlannerDataBase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (PlannerDataBase.class) {
                 if (INSTANCE == null) {
+
+                    // Allow DB access on main thread should be avoided because it may
+                    // cause UI to slow down when access DB.
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PlannerDataBase.class, DB_NAME).build();
+                            PlannerDataBase.class, DB_NAME).allowMainThreadQueries().build();
                 }
             }
         }

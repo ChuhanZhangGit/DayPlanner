@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".taskslot.TasksListFragment">
+    tools:context=".taskslot.SlotsListFragment">
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -26,10 +26,16 @@
             android:hint="Enter item"></EditText>
 
     </LinearLayout>
+
     <ListView
         android:id="@+id/task_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="491dp"
         android:layout_marginTop="12dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="addnasdf"></Button>
 
 </LinearLayout>

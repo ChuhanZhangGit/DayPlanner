@@ -24,6 +24,7 @@ public class Days {
 
     public Days(@NonNull LocalDate date) {
         this.date = date;
+        numCompleted = 0;
     }
 
     @NonNull

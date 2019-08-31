@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TasksListFragment extends Fragment implements SlotsContract.Fragment {
+public class SlotsListFragment extends Fragment implements SlotsContract.Fragment {
 
     private SlotsContract.Presenter slotsPresenter;
 
@@ -48,8 +48,12 @@ public class TasksListFragment extends Fragment implements SlotsContract.Fragmen
             "Scary."};
 
 
-    public TasksListFragment() {
+    public SlotsListFragment() {
         // Required empty public constructor
+    }
+
+    public static SlotsListFragment newInstance() {
+        return new SlotsListFragment();
     }
 
     @Override
@@ -78,6 +82,12 @@ public class TasksListFragment extends Fragment implements SlotsContract.Fragmen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        slotsPresenter.loadSlotsInDay();
+    }
+
+    @Override
     public void showSlotsInDay(List<SlotInDay> tasks) {
         slotInDayAdapter.updateList(tasks);
     }
@@ -101,8 +111,6 @@ public class TasksListFragment extends Fragment implements SlotsContract.Fragmen
             this.slotList = slotList;
         }
 
-
-
         public void updateList(List<SlotInDay> slots) {
             slotList = slots;
             notifyDataSetChanged();
@@ -125,8 +133,8 @@ public class TasksListFragment extends Fragment implements SlotsContract.Fragmen
 
         public View getView(int position, View view, ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            View rowView = inflater.inflate(R.layout.tasks_row, null, true);
-            TextView taskTimeView = rowView.findViewById(R.id.task_time);
+            View rowView = inflater.inflate(R.layout.slot_row, null, true);
+            TextView taskTimeView = rowView.findViewById(R.id.slot_time);
             TextView taskContentView = rowView.findViewById(R.id.task_content);
 
             SlotInDay slot = slotList.get(position);

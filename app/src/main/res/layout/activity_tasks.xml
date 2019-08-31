@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".taskslot.TasksActivity">
+    tools:context=".taskslot.SlotsListActivity">
 
     <fragment
         android:id="@+id/frag_task_list"
-        android:name="com.example.hourlyplanner.taskslot.TasksListFragment"
+        android:name="com.example.hourlyplanner.taskslot.SlotsListFragment"
         tools:layout="@layout/fragment_tasks_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
