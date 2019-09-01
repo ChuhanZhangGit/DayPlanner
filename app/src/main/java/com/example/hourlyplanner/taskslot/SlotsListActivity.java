@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hourlyplanner.R;
+import com.example.hourlyplanner.data.PlannerRepository;
 import com.example.hourlyplanner.data.local.PlannerDataBase;
 
 public class SlotsListActivity extends AppCompatActivity {
@@ -24,8 +25,9 @@ public class SlotsListActivity extends AppCompatActivity {
             slotsListFragment = SlotsListFragment.newInstance();
         }
 
-        // Initialize presenter
-        slotsPresenter = new SlotsPresenter(PlannerDataBase.getDataBase(getApplicationContext()),
+        // Initialize presenter, this is where dependency injection should be used.
+        slotsPresenter = new SlotsPresenter(PlannerRepository.getInstance(
+                PlannerDataBase.getDataBase(getApplicationContext())),
                 slotsListFragment);
 
     }

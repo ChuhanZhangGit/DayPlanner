@@ -44,8 +44,8 @@ public class SlotsPresenter implements SlotsContract.Presenter {
             iterator = iterator.plusMinutes(30);
         }
 
-        List<SlotInDay> slot = slotDao.getAllTasks();
-        view.showSlotsInDay(slot);
+        List<SlotInDay> slots =  plannerRepo.getAllSlotsInDay(someDate);
+        view.showSlotsInDay(slots);
         Log.i("presenter", "showslot");
     }
 

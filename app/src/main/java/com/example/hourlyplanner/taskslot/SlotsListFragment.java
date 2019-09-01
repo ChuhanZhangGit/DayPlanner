@@ -81,6 +81,10 @@ public class SlotsListFragment extends Fragment implements SlotsContract.Fragmen
         return root;
     }
 
+    private void updateListView() {
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();

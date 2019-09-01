@@ -17,14 +17,14 @@ import java.util.List;
 public interface SlotDao {
 
     @Query("SELECT * FROM slotInDay")
-    List<SlotInDay> getAllTasks();
+    List<SlotInDay> getAllSlots();
 
 
     @Query("SELECT * FROM slotInDay WHERE dateOfTask =:date")
     List<SlotInDay> getSlotsInDay(LocalDate date);
 
     @Query("SELECT * FROM slotInDay WHERE timeInDay = :dateTime AND dateOfTask =:slotDate LIMIT 1")
-    SlotInDay getTaskAtTime(LocalTime dateTime, LocalDate slotDate);
+    SlotInDay getSlotAtTime(LocalDate slotDate, LocalTime dateTime);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(SlotInDay slot);

@@ -5,3 +5,5 @@
    Remember to optimize the foreign key implementation of the one to many relation. 
 
 2. Write method to input and retrieve data from DAO.
+
+3. Explore dependency injection tool Dagger2 that allow injection of database and repository. This allows easier testing of the code.

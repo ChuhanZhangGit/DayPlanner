@@ -21,11 +21,19 @@ public class PlannerRepository {
 
     private final SlotDao slotDao;
 
-    public PlannerRepository(PlannerDataBase localDataBase) {
+    private PlannerRepository(PlannerDataBase localDataBase) {
         this.localDataBase = localDataBase;
         daysDao = localDataBase.daysDao();
         slotDao = localDataBase.slotsDao();
     }
+
+    public static PlannerRepository getInstance(PlannerDataBase localDataBase) {
+        if (INSTANCE == null) {
+            INSTANCE = new PlannerRepository(localDataBase);
+        }
+        return INSTANCE;
+    }
+
 
     public void insertDate(LocalDate localDate) {
         daysDao.addNewDayToDataBase(new Days(localDate));
@@ -59,11 +67,16 @@ public class PlannerRepository {
 
     public List<SlotInDay> getAllSlotsInDay(final LocalDate localDate) {
         new AsyncTask<Void, Void, Void>() {
+
             @Override
             protected Void doInBackground(Void... voids) {
-                slotDao.getSlotsInDay(localDate);
                 return null;
             }
         }
+        return slotDao.getSlotsInDay(localDate);
+    }
+
+    public SlotInDay getSlotAtTime(final LocalDate localDate, final LocalTime localTime) {
+        return slotDao.getSlotAtTime(localDate, localTime);
     }
 }
