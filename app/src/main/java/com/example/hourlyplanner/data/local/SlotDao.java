@@ -27,7 +27,7 @@ public interface SlotDao {
     @Query("SELECT * FROM slotInDay WHERE timeInDay = :dateTime AND dateOfTask =:slotDate LIMIT 1")
     LiveData<SlotInDay> getSlotAtTime(LocalDate slotDate, LocalTime dateTime);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(SlotInDay slot);
 
     @Update

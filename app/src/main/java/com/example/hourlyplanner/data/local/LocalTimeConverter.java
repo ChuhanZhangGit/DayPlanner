@@ -6,12 +6,12 @@ import org.threeten.bp.LocalTime;
 
 public class LocalTimeConverter {
     @TypeConverter
-    public static LocalTime fromTimestamp(String timeString) {
+    public static LocalTime fromString (String timeString) {
         return timeString == null ? null : LocalTime.parse(timeString);
     }
 
     @TypeConverter
-    public static String dateToTimestamp(LocalTime time) {
+    public static String fromTime (LocalTime time) {
         return time == null ? null : time.toString();
     }
 }

@@ -11,7 +11,6 @@ import com.example.hourlyplanner.data.local.PlannerDataBase;
 
 public class SlotsListActivity extends AppCompatActivity {
 
-    private SlotsPresenter slotsPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,10 +24,12 @@ public class SlotsListActivity extends AppCompatActivity {
             slotsListFragment = SlotsListFragment.newInstance();
         }
 
+
+
         // Initialize presenter, this is where dependency injection should be used.
-        slotsPresenter = new SlotsPresenter(PlannerRepository.getInstance(
-                PlannerDataBase.getDataBase(getApplicationContext())),
-                slotsListFragment);
+//        slotsPresenter = new SlotsPresenter(PlannerRepository.getInstance(
+//                PlannerDataBase.getDataBase(getApplicationContext())),
+//                slotsListFragment);
 
     }
 

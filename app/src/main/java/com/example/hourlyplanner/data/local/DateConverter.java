@@ -7,12 +7,12 @@ import org.threeten.bp.LocalDate;
 
 public class DateConverter {
     @TypeConverter
-    public static LocalDate fromTimestamp(String dateString) {
+    public static LocalDate fromString (String dateString) {
         return dateString == null ? null : LocalDate.parse(dateString);
     }
 
     @TypeConverter
-    public static String dateToTimestamp(LocalDate date) {
+    public static String fromDate(LocalDate date) {
         return date == null ? null : date.toString();
     }
 

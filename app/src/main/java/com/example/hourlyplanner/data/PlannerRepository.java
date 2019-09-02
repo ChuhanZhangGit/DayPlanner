@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PlannerRepository {
 
-    private static  PlannerRepository INSTANCE = null;
+    private static PlannerRepository INSTANCE = null;
 
     private final PlannerDataBase localDataBase;
 
@@ -42,13 +42,13 @@ public class PlannerRepository {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                daysDao.addNewDayToDataBase(new Days(localDate));
+                daysDao.insertDay(new Days(localDate));
                 return null;
             }
         }.execute();
     }
 
-    public void insertTimeSlot(LocalTime localTime, LocalDate localDate) {
+    public void insertTimeSlot(LocalDate localDate, LocalTime localTime) {
         SlotInDay slotInDay = new SlotInDay(localTime, null, localDate);
         insertTimeSlot(slotInDay);
     }

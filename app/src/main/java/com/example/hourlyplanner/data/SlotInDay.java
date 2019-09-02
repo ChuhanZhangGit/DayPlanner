@@ -15,11 +15,12 @@ import org.threeten.bp.LocalTime;
 @Entity(tableName = "slotInDay",
         foreignKeys = @ForeignKey(entity = Days.class, parentColumns = "date",
                 childColumns = "dateOfTask", onDelete = ForeignKey.CASCADE),
-        indices = {@Index(value = "dateOfTask", unique = true, name = "slotDayIndex")})
+        indices = {@Index(value = "dateOfTask", unique = false, name = "slotDayIndex")})
 public class SlotInDay {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "slotid")
+    private int slotId;
 
-
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "timeInDay")
     private LocalTime slotTime;
@@ -43,11 +44,18 @@ public class SlotInDay {
     public LocalTime getSlotTime() {
         return slotTime;
     }
-    
 
     @NonNull
     public LocalDate getSlotDate() {
         return slotDate;
+    }
+
+    public int getSlotId() {
+        return slotId;
+    }
+
+    public void setSlotId(int slotId) {
+        this.slotId = slotId;
     }
 
     @Nullable

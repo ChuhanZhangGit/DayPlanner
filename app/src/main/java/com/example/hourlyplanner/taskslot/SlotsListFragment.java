@@ -14,9 +14,13 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.hourlyplanner.R;
 import com.example.hourlyplanner.data.SlotInDay;
+
+import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,15 +29,15 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SlotsListFragment extends Fragment implements SlotsContract.Fragment {
-
-    private SlotsContract.Presenter slotsPresenter;
+public class SlotsListFragment extends Fragment  {
 
     private EditText itemEntry;
     private Button addButton;
     private ListView taskListView;
 
     private SlotListAdapter slotInDayAdapter;
+
+    private SlotsListViewModel slotsViewModel;
 
     private Context context;
 
@@ -66,6 +70,16 @@ public class SlotsListFragment extends Fragment implements SlotsContract.Fragmen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        slotsViewModel = ViewModelProviders.of(this).get(SlotsListViewModel.class);
+
+        LocalDate someDate = LocalDate.now();
+        slotsViewModel.getAllSlotsInDay(someDate).observe(this, new Observer<List<SlotInDay>>() {
+            @Override
+            public void onChanged(List<SlotInDay> slotInDays) {
+                slotInDayAdapter.updateList(slotInDays);
+            }
+        });
+
 
     }
 
@@ -88,30 +102,17 @@ public class SlotsListFragment extends Fragment implements SlotsContract.Fragmen
     @Override
     public void onResume() {
         super.onResume();
-        slotsPresenter.loadSlotsInDay();
     }
 
-    @Override
-    public void showSlotsInDay(List<SlotInDay> tasks) {
-        slotInDayAdapter.updateList(tasks);
-    }
-
-    @Override
-    public void setPresenter(SlotsContract.Presenter presenter) throws IllegalArgumentException {
-        if (presenter == null) {
-            throw new IllegalArgumentException("Presenter is null.");
-        }
-        slotsPresenter = presenter;
-    }
 
     private class SlotListAdapter extends BaseAdapter {
 
         //to reference the Activity
-        private final Context context;
+        private final Context slotContext;
         private List<SlotInDay> slotList;
 
         public SlotListAdapter(Context context, List<SlotInDay> slotList){
-            this.context = context;
+            this.slotContext = context;
             this.slotList = slotList;
         }
 
@@ -136,7 +137,7 @@ public class SlotsListFragment extends Fragment implements SlotsContract.Fragmen
         }
 
         public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater = LayoutInflater.from(context);
+            LayoutInflater inflater = LayoutInflater.from(slotContext);
             View rowView = inflater.inflate(R.layout.slot_row, null, true);
             TextView taskTimeView = rowView.findViewById(R.id.slot_time);
             TextView taskContentView = rowView.findViewById(R.id.task_content);

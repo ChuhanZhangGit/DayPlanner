@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ac94bcb21315922aab334e5456e01243",
+    "identityHash": "c5b347d5d5364637a89b986b4cc9f99a",
     "entities": [
       {
         "tableName": "days",
@@ -41,8 +41,14 @@
       },
       {
         "tableName": "slotInDay",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timeInDay` TEXT NOT NULL, `taskDescription` TEXT, `dateOfTask` TEXT NOT NULL, PRIMARY KEY(`timeInDay`), FOREIGN KEY(`dateOfTask`) REFERENCES `days`(`date`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`slotid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timeInDay` TEXT NOT NULL, `taskDescription` TEXT, `dateOfTask` TEXT NOT NULL, FOREIGN KEY(`dateOfTask`) REFERENCES `days`(`date`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
+          {
+            "fieldPath": "slotId",
+            "columnName": "slotid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "slotTime",
             "columnName": "timeInDay",
@@ -64,18 +70,18 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "timeInDay"
+            "slotid"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [
           {
             "name": "slotDayIndex",
-            "unique": true,
+            "unique": false,
             "columnNames": [
               "dateOfTask"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `slotDayIndex` ON `${TABLE_NAME}` (`dateOfTask`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `slotDayIndex` ON `${TABLE_NAME}` (`dateOfTask`)"
           }
         ],
         "foreignKeys": [
@@ -96,7 +102,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac94bcb21315922aab334e5456e01243')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c5b347d5d5364637a89b986b4cc9f99a')"
     ]
   }
 }

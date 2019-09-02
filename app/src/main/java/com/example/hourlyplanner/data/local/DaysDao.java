@@ -21,10 +21,13 @@ public interface  DaysDao {
     @Query("SELECT * FROM days WHERE date =:localDate")
     Days getDayByDate(LocalDate localDate);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void addNewDayToDataBase(Days days);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertDay(Days days);
 
     @Update
     void update(Days days);
+
+    @Query("DELETE FROM days")
+    void deleteAllDate();
 
 }
