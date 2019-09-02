@@ -2,6 +2,8 @@ package com.example.hourlyplanner.data;
 
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.hourlyplanner.data.local.DaysDao;
 import com.example.hourlyplanner.data.local.PlannerDataBase;
 import com.example.hourlyplanner.data.local.SlotDao;
@@ -35,8 +37,15 @@ public class PlannerRepository {
     }
 
 
-    public void insertDate(LocalDate localDate) {
-        daysDao.addNewDayToDataBase(new Days(localDate));
+    public void insertDate(final LocalDate localDate) {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                daysDao.addNewDayToDataBase(new Days(localDate));
+                return null;
+            }
+        }.execute();
     }
 
     public void insertTimeSlot(LocalTime localTime, LocalDate localDate) {
@@ -65,18 +74,11 @@ public class PlannerRepository {
         }.execute();
     }
 
-    public List<SlotInDay> getAllSlotsInDay(final LocalDate localDate) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                return null;
-            }
-        }
+    public LiveData<List<SlotInDay>> getAllSlotsInDay(final LocalDate localDate) {
         return slotDao.getSlotsInDay(localDate);
     }
 
-    public SlotInDay getSlotAtTime(final LocalDate localDate, final LocalTime localTime) {
+    public LiveData<SlotInDay> getSlotAtTime(final LocalDate localDate, final LocalTime localTime) {
         return slotDao.getSlotAtTime(localDate, localTime);
     }
 }
