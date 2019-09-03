@@ -7,3 +7,7 @@
 2. Write method to input and retrieve data from DAO.
 
 3. Explore dependency injection tool Dagger2 that allow injection of database and repository. This allows easier testing of the code.
+
+4. Find out how calendar's database look like?
+
+5. Save the user input on Pause/ Destroy

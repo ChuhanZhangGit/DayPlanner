@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:weightSum="10">
+
 
     <TextView
         android:id="@+id/slot_time"
@@ -10,8 +12,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"/>
 
-    <TextView
+    <EditText
         android:id="@+id/task_content"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>

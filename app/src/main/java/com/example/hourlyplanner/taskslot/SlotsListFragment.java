@@ -140,7 +140,7 @@ public class SlotsListFragment extends Fragment  {
             LayoutInflater inflater = LayoutInflater.from(slotContext);
             View rowView = inflater.inflate(R.layout.slot_row, null, true);
             TextView taskTimeView = rowView.findViewById(R.id.slot_time);
-            TextView taskContentView = rowView.findViewById(R.id.task_content);
+            EditText taskContentView = rowView.findViewById(R.id.task_content);
 
             SlotInDay slot = slotList.get(position);
 
