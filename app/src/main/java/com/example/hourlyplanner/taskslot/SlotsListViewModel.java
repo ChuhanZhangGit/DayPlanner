@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.hourlyplanner.data.ConstantSlot;
+import com.example.hourlyplanner.data.Days;
 import com.example.hourlyplanner.data.PlannerRepository;
 import com.example.hourlyplanner.data.SlotInDay;
 import com.example.hourlyplanner.data.local.PlannerDataBase;
@@ -25,8 +27,16 @@ public class SlotsListViewModel extends AndroidViewModel {
                 PlannerDataBase.getDataBase(application));
     }
 
+    public LiveData<List<ConstantSlot>> getConstantSlots() {
+        return plannerRepository.getAllConstantSlots();
+    }
+
     public LiveData<List<SlotInDay>> getAllSlotsInDay(LocalDate localDate) {
         return plannerRepository.getAllSlotsInDay(localDate);
+    }
+
+    public LiveData<Days> getDayByDate(LocalDate localDate) {
+        return plannerRepository.getDayByDate(localDate);
     }
 
     public void insertSlotInDay (LocalDate localDate, LocalTime localTime) {

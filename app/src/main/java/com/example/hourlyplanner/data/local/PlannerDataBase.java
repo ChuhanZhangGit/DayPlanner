@@ -11,6 +11,8 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.hourlyplanner.data.ConstantSlot;
+import com.example.hourlyplanner.data.ConstantSlotDao;
 import com.example.hourlyplanner.data.Days;
 import com.example.hourlyplanner.data.SlotInDay;
 
@@ -20,7 +22,7 @@ import org.threeten.bp.LocalTime;
 import java.util.List;
 
 
-@Database(entities = {Days.class, SlotInDay.class}, version = 1)
+@Database(entities = {Days.class, SlotInDay.class, ConstantSlot.class}, version = 1)
 @TypeConverters({DateConverter.class, LocalTimeConverter.class})
 
 public abstract class PlannerDataBase extends RoomDatabase {
@@ -29,6 +31,8 @@ public abstract class PlannerDataBase extends RoomDatabase {
     public abstract DaysDao daysDao();
 
     public abstract SlotDao slotsDao();
+
+    public abstract ConstantSlotDao constantSlotDao();
 
     private static final String DB_NAME = "planner.db";
 
@@ -66,29 +70,44 @@ public abstract class PlannerDataBase extends RoomDatabase {
 
         private DaysDao daysDao;
         private SlotDao slotDao;
+        private ConstantSlotDao constantSlotDao;
 
         public PopulateDBAsync(PlannerDataBase dataBase) {
             daysDao = dataBase.daysDao();
             slotDao = dataBase.slotsDao();
+            constantSlotDao = dataBase.constantSlotDao();
+
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
+            // Populate the slots in day with predefined time.
+            constantSlotDao.deleteAll();
             daysDao.deleteAllDate();
 
-            LocalDate someDate = LocalDate.now();
-            String taskDescription = "random task";
             LocalTime start = LocalTime.of( 8,30,0) ;
             LocalTime stop = LocalTime.of( 17 , 0 , 0 ) ;
 
-            daysDao.insertDay(new Days(someDate));
 
             LocalTime iterator = start;
             while ( iterator.isBefore( stop ) ) {
+                constantSlotDao.insert(new ConstantSlot(iterator));
+                // Set up the next loop.
+                iterator = iterator.plusMinutes(60);
+            }
+
+
+            LocalDate someDate = LocalDate.now();
+            String taskDescription = "random task";
+
+            daysDao.insertDay(new Days(someDate));
+
+            iterator = start;
+            while ( iterator.isBefore( stop ) ) {
                 slotDao.insert(new SlotInDay(iterator, taskDescription, someDate));
                 // Set up the next loop.
-                iterator = iterator.plusMinutes(30);
+                iterator = iterator.plusMinutes(60);
             }
 
             return null;

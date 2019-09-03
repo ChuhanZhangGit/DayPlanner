@@ -1,5 +1,6 @@
 package com.example.hourlyplanner.data.local;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -19,7 +20,7 @@ public interface  DaysDao {
     List<Days> getAllDaysInDataBase();
 
     @Query("SELECT * FROM days WHERE date =:localDate")
-    Days getDayByDate(LocalDate localDate);
+    LiveData<Days> getDayByDate(LocalDate localDate);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDay(Days days);

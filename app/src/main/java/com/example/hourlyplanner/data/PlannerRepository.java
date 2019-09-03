@@ -23,10 +23,13 @@ public class PlannerRepository {
 
     private final SlotDao slotDao;
 
+    private final ConstantSlotDao constantSlotDao;
+
     private PlannerRepository(PlannerDataBase localDataBase) {
         this.localDataBase = localDataBase;
         daysDao = localDataBase.daysDao();
         slotDao = localDataBase.slotsDao();
+        constantSlotDao = localDataBase.constantSlotDao();
     }
 
     public static PlannerRepository getInstance(PlannerDataBase localDataBase) {
@@ -74,11 +77,16 @@ public class PlannerRepository {
         }.execute();
     }
 
+    public LiveData<List<ConstantSlot>> getAllConstantSlots() {
+        return constantSlotDao.getAllConstantSlot();
+    }
+
+    public LiveData<Days> getDayByDate(LocalDate date) {
+        return daysDao.getDayByDate(date);
+    }
+
     public LiveData<List<SlotInDay>> getAllSlotsInDay(final LocalDate localDate) {
         return slotDao.getSlotsInDay(localDate);
     }
 
-    public LiveData<SlotInDay> getSlotAtTime(final LocalDate localDate, final LocalTime localTime) {
-        return slotDao.getSlotAtTime(localDate, localTime);
-    }
 }

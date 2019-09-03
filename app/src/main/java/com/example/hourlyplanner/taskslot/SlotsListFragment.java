@@ -18,6 +18,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.hourlyplanner.R;
+import com.example.hourlyplanner.data.ConstantSlot;
+import com.example.hourlyplanner.data.Days;
 import com.example.hourlyplanner.data.SlotInDay;
 
 import org.threeten.bp.LocalDate;
@@ -38,6 +40,9 @@ public class SlotsListFragment extends Fragment  {
     private SlotListAdapter slotInDayAdapter;
 
     private SlotsListViewModel slotsViewModel;
+
+    private LocalDate someDate = LocalDate.now();
+
 
     private Context context;
 
@@ -64,7 +69,8 @@ public class SlotsListFragment extends Fragment  {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        slotInDayAdapter = new SlotListAdapter(context, new ArrayList<SlotInDay>());
+        slotInDayAdapter = new SlotListAdapter(context, new ArrayList<SlotInDay>(),
+                new ArrayList<ConstantSlot>());
     }
 
     @Override
@@ -72,7 +78,6 @@ public class SlotsListFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         slotsViewModel = ViewModelProviders.of(this).get(SlotsListViewModel.class);
 
-        LocalDate someDate = LocalDate.now();
         slotsViewModel.getAllSlotsInDay(someDate).observe(this, new Observer<List<SlotInDay>>() {
             @Override
             public void onChanged(List<SlotInDay> slotInDays) {
@@ -80,7 +85,17 @@ public class SlotsListFragment extends Fragment  {
             }
         });
 
+        slotsViewModel.getConstantSlots().observe(this, new Observer<List<ConstantSlot>>() {
+            @Override
+            public void onChanged(List<ConstantSlot> constantSlots) {
+                slotInDayAdapter.updateConstantSlots(constantSlots);
+            }
+        });
 
+    }
+
+    public void setViewDate(LocalDate date) {
+        someDate = date;
     }
 
     @Override
@@ -110,10 +125,13 @@ public class SlotsListFragment extends Fragment  {
         //to reference the Activity
         private final Context slotContext;
         private List<SlotInDay> slotList;
+        private List<ConstantSlot> constantSlots;
 
-        public SlotListAdapter(Context context, List<SlotInDay> slotList){
+        public SlotListAdapter(Context context, List<SlotInDay> slotList,
+                               List<ConstantSlot> constantSlots){
             this.slotContext = context;
             this.slotList = slotList;
+            this.constantSlots = constantSlots;
         }
 
         public void updateList(List<SlotInDay> slots) {
@@ -121,14 +139,20 @@ public class SlotsListFragment extends Fragment  {
             notifyDataSetChanged();
         }
 
+        public void updateConstantSlots(List<ConstantSlot> constantSlots) {
+            this.constantSlots = constantSlots;
+            notifyDataSetChanged();
+        }
+
+
         @Override
         public int getCount() {
-            return slotList.size();
+            return constantSlots.size();
         }
 
         @Override
-        public SlotInDay getItem(int i) {
-            return slotList.get(i);
+        public ConstantSlot getItem(int i) {
+            return constantSlots.get(i);
         }
 
         @Override
@@ -139,13 +163,19 @@ public class SlotsListFragment extends Fragment  {
         public View getView(int position, View view, ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(slotContext);
             View rowView = inflater.inflate(R.layout.slot_row, null, true);
-            TextView taskTimeView = rowView.findViewById(R.id.slot_time);
-            EditText taskContentView = rowView.findViewById(R.id.task_content);
+            TextView slotTimeView = rowView.findViewById(R.id.slot_time);
+            EditText slotContentView = rowView.findViewById(R.id.task_content);
 
-            SlotInDay slot = slotList.get(position);
+            ConstantSlot constantSlot = constantSlots.get(position);
+            slotTimeView.setText(constantSlot.getTimeSlot().toString());
 
-            taskTimeView.setText(slot.getSlotTime().toString());
-            taskContentView.setText(slot.getTaskDescription());
+            if (slotList.size() == 0) {
+                slotContentView.setText("");
+            }
+            else {
+                SlotInDay slot = slotList.get(position);
+                slotContentView.setText(slot.getTaskDescription());
+            }
             return rowView;
 
         }
