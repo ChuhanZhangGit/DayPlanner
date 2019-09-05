@@ -27,12 +27,14 @@
             <LinearLayout
                 android:id="@+id/calendar_view_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:orientation="vertical">
 
                 <CalendarView
                     android:id="@+id/calendar_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/calendar_background"/>
             </LinearLayout>
 
@@ -52,12 +54,11 @@
                     android:layout_height="?attr/actionBarSize">
 
                     <TextView
-                        android:id="@+id/toolbar_time_display"
+                        android:id="@+id/toolbar_date_display"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAlignment="center"
-                        android:textSize="20dp"
-                        android:text="Current Date"/>
+                        android:textSize="20dp" />
 
                 </LinearLayout>
 
@@ -71,13 +72,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
         <fragment
             android:id="@+id/frag_task_list"
             android:name="com.example.hourlyplanner.taskslot.SlotsListFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:layout="@layout/fragment_tasks_list" />
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

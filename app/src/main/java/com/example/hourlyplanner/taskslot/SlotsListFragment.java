@@ -13,8 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.arch.core.util.Function;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.hourlyplanner.R;
@@ -31,7 +35,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SlotsListFragment extends Fragment  {
+public class SlotsListFragment extends Fragment {
 
     private EditText itemEntry;
     private Button addButton;
@@ -41,20 +45,9 @@ public class SlotsListFragment extends Fragment  {
 
     private SlotsListViewModel slotsViewModel;
 
-    private LocalDate someDate = LocalDate.now();
-
+    private LocalDate currentDate = LocalDate.now();
 
     private Context context;
-
-    String[] taskTimeArray = {"Octopus", "Pig", "Sheep", "Rabbit", "Snake", "Spider"};
-
-    String[] taskContentArray = {
-            "8 tentacled monster",
-            "Delicious in rolls",
-            "Great for jumpers",
-            "Nice in a stew",
-            "Great for shoes",
-            "Scary."};
 
 
     public SlotsListFragment() {
@@ -78,7 +71,20 @@ public class SlotsListFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         slotsViewModel = ViewModelProviders.of(this).get(SlotsListViewModel.class);
 
-        slotsViewModel.getAllSlotsInDay(someDate).observe(this, new Observer<List<SlotInDay>>() {
+
+        // Switch map that reacts on changes of trigger (Local date) and apply the function to the
+        // given value of the trigger and set the result live data
+        MutableLiveData<LocalDate> dateLiveData = new MutableLiveData<>();
+
+        LiveData<List<SlotInDay>> slotListLiveData = Transformations.switchMap(dateLiveData,
+                new Function<LocalDate, LiveData<List<SlotInDay>>>() {
+                    @Override
+                    public LiveData<List<SlotInDay>> apply(LocalDate date) {
+                        return slotsViewModel.getAllSlotsInDay(date);
+                    }
+                });
+
+        slotListLiveData.observe(this, new Observer<List<SlotInDay>>() {
             @Override
             public void onChanged(List<SlotInDay> slotInDays) {
                 slotInDayAdapter.updateList(slotInDays);
@@ -91,11 +97,10 @@ public class SlotsListFragment extends Fragment  {
                 slotInDayAdapter.updateConstantSlots(constantSlots);
             }
         });
-
     }
 
     public void setViewDate(LocalDate date) {
-        someDate = date;
+        currentDate = date;
     }
 
     @Override
@@ -128,7 +133,7 @@ public class SlotsListFragment extends Fragment  {
         private List<ConstantSlot> constantSlots;
 
         public SlotListAdapter(Context context, List<SlotInDay> slotList,
-                               List<ConstantSlot> constantSlots){
+                               List<ConstantSlot> constantSlots) {
             this.slotContext = context;
             this.slotList = slotList;
             this.constantSlots = constantSlots;
@@ -171,8 +176,7 @@ public class SlotsListFragment extends Fragment  {
 
             if (slotList.size() == 0) {
                 slotContentView.setText("");
-            }
-            else {
+            } else {
                 SlotInDay slot = slotList.get(position);
                 slotContentView.setText(slot.getTaskDescription());
             }
