@@ -35,12 +35,16 @@ public class SlotsListViewModel extends AndroidViewModel {
         return plannerRepository.getAllSlotsInDay(localDate);
     }
 
-    public LiveData<Days> getDayByDate(LocalDate localDate) {
-        return plannerRepository.getDayByDate(localDate);
+    public void insertSlotInDay(LocalDate date, LocalTime time, String content) {
+        plannerRepository.insertTimeSlot(date, time, content);
     }
 
-    public void insertSlotInDay (LocalDate localDate, LocalTime localTime) {
-        plannerRepository.insertTimeSlot(localDate, localTime);
+    public void insertDay(LocalDate date) {
+        plannerRepository.insertDate(date);
+    }
+
+    public LiveData<Days> getDayByDate(LocalDate localDate) {
+        return plannerRepository.getDayByDate(localDate);
     }
 
 }

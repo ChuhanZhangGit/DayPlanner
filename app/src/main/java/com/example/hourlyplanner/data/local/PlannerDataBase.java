@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -12,14 +11,11 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.hourlyplanner.data.ConstantSlot;
-import com.example.hourlyplanner.data.ConstantSlotDao;
 import com.example.hourlyplanner.data.Days;
 import com.example.hourlyplanner.data.SlotInDay;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
-
-import java.util.List;
 
 
 @Database(entities = {Days.class, SlotInDay.class, ConstantSlot.class}, version = 1)
@@ -104,10 +100,13 @@ public abstract class PlannerDataBase extends RoomDatabase {
             daysDao.insertDay(new Days(someDate));
 
             iterator = start;
+            int counter = 1;
             while ( iterator.isBefore( stop ) ) {
-                slotDao.insert(new SlotInDay(iterator, taskDescription, someDate));
+
+                slotDao.insert(new SlotInDay(iterator, taskDescription + counter, someDate));
                 // Set up the next loop.
                 iterator = iterator.plusMinutes(60);
+                counter++;
             }
 
             return null;

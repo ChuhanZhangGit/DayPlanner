@@ -1,14 +1,12 @@
-package com.example.hourlyplanner.data;
+package com.example.hourlyplanner.data.local;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
+import com.example.hourlyplanner.data.ConstantSlot;
 
 import java.util.List;
 

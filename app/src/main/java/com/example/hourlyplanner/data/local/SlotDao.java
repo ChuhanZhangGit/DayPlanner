@@ -5,7 +5,6 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.hourlyplanner.data.SlotInDay;
 
@@ -27,11 +26,11 @@ public interface SlotDao {
     @Query("SELECT * FROM slotInDay WHERE timeInDay = :dateTime AND dateOfTask =:slotDate LIMIT 1")
     LiveData<SlotInDay> getSlotAtTime(LocalDate slotDate, LocalTime dateTime);
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(SlotInDay slot);
 
-    @Update
-    void updateTaskInDay(SlotInDay task);
+//    @Update
+//    void updateTaskInDay(SlotInDay task);
 
     @Query("DELETE FROM slotInDay WHERE timeInDay =:localTime")
     void deleteTaskAtTime(LocalTime localTime);

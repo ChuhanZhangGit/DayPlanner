@@ -22,7 +22,7 @@ public interface  DaysDao {
     @Query("SELECT * FROM days WHERE date =:localDate")
     LiveData<Days> getDayByDate(LocalDate localDate);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertDay(Days days);
 
     @Update

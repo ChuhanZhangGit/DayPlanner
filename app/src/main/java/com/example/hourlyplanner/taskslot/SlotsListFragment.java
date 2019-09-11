@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.hourlyplanner.R;
 import com.example.hourlyplanner.data.ConstantSlot;
-import com.example.hourlyplanner.data.Days;
 import com.example.hourlyplanner.data.SlotInDay;
 
 import org.threeten.bp.LocalDate;
@@ -37,15 +35,14 @@ import java.util.List;
  */
 public class SlotsListFragment extends Fragment {
 
-    private EditText itemEntry;
-    private Button addButton;
-    private ListView taskListView;
-
     private SlotListAdapter slotInDayAdapter;
 
     private SlotsListViewModel slotsViewModel;
 
-    private LocalDate currentDate = LocalDate.now();
+    private MutableLiveData<LocalDate> dateLiveData;
+
+    private ListView slotsListView;
+
 
     private Context context;
 
@@ -74,7 +71,10 @@ public class SlotsListFragment extends Fragment {
 
         // Switch map that reacts on changes of trigger (Local date) and apply the function to the
         // given value of the trigger and set the result live data
-        MutableLiveData<LocalDate> dateLiveData = new MutableLiveData<>();
+        dateLiveData = new MutableLiveData<>();
+
+        // Set the trigger point to current date
+        dateLiveData.setValue(LocalDate.now());
 
         LiveData<List<SlotInDay>> slotListLiveData = Transformations.switchMap(dateLiveData,
                 new Function<LocalDate, LiveData<List<SlotInDay>>>() {
@@ -87,7 +87,7 @@ public class SlotsListFragment extends Fragment {
         slotListLiveData.observe(this, new Observer<List<SlotInDay>>() {
             @Override
             public void onChanged(List<SlotInDay> slotInDays) {
-                slotInDayAdapter.updateList(slotInDays);
+                slotInDayAdapter.updateSlotList(slotInDays);
             }
         });
 
@@ -100,7 +100,24 @@ public class SlotsListFragment extends Fragment {
     }
 
     public void setViewDate(LocalDate date) {
-        currentDate = date;
+        dateLiveData.setValue(date);
+//        writeSlotChangesToDB();
+    }
+
+    private void writeSlotChangesToDB() {
+        int childrenCount = slotsListView.getChildCount();
+        for (int i = 0; i < childrenCount; i++) {
+            View slot = slotsListView.getChildAt(i);
+            String slotContent = ((EditText) slotsListView.findViewById(R.id.task_content))
+                    .getText().toString();
+            if (slotContent.length() != 0) {
+                // Insert day first into DB because foreign key constrain between day and slot
+                slotsViewModel.insertDay(dateLiveData.getValue());
+                List<ConstantSlot> constantSlots = slotInDayAdapter.getConstantSlots();
+                slotsViewModel.insertSlotInDay(dateLiveData.getValue(),
+                        constantSlots.get(i).getTimeSlot(), slotContent);
+            }
+        }
     }
 
     @Override
@@ -108,9 +125,9 @@ public class SlotsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_tasks_list, container, false);
-        ListView listView = root.findViewById(R.id.task_list_view);
+        slotsListView = root.findViewById(R.id.task_list_view);
 
-        listView.setAdapter(slotInDayAdapter);
+        slotsListView.setAdapter(slotInDayAdapter);
 
         return root;
     }
@@ -139,7 +156,7 @@ public class SlotsListFragment extends Fragment {
             this.constantSlots = constantSlots;
         }
 
-        public void updateList(List<SlotInDay> slots) {
+        public void updateSlotList(List<SlotInDay> slots) {
             slotList = slots;
             notifyDataSetChanged();
         }
@@ -149,6 +166,9 @@ public class SlotsListFragment extends Fragment {
             notifyDataSetChanged();
         }
 
+        public List<ConstantSlot> getConstantSlots() {
+            return constantSlots;
+        }
 
         @Override
         public int getCount() {
@@ -170,7 +190,6 @@ public class SlotsListFragment extends Fragment {
             View rowView = inflater.inflate(R.layout.slot_row, null, true);
             TextView slotTimeView = rowView.findViewById(R.id.slot_time);
             EditText slotContentView = rowView.findViewById(R.id.task_content);
-
             ConstantSlot constantSlot = constantSlots.get(position);
             slotTimeView.setText(constantSlot.getTimeSlot().toString());
 
