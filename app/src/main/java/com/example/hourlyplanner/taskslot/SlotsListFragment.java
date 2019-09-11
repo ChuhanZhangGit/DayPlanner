@@ -3,14 +3,18 @@ package com.example.hourlyplanner.taskslot;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.fragment.app.Fragment;
@@ -25,6 +29,7 @@ import com.example.hourlyplanner.data.ConstantSlot;
 import com.example.hourlyplanner.data.SlotInDay;
 
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,7 @@ public class SlotsListFragment extends Fragment {
 
     private ListView slotsListView;
 
+    private Button saveAll;
 
     private Context context;
 
@@ -99,20 +105,33 @@ public class SlotsListFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        saveAll = view.findViewById(R.id.save_all_button);
+        saveAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "save",
+                        Toast.LENGTH_LONG).show();
+                writeSlotChangesToDB();
+            }
+        });
+    }
+
     public void setViewDate(LocalDate date) {
+        writeSlotChangesToDB();
         dateLiveData.setValue(date);
-//        writeSlotChangesToDB();
     }
 
     private void writeSlotChangesToDB() {
         int childrenCount = slotsListView.getChildCount();
         for (int i = 0; i < childrenCount; i++) {
             View slot = slotsListView.getChildAt(i);
-            String slotContent = ((EditText) slotsListView.findViewById(R.id.task_content))
+            String slotContent = ((EditText) slot.findViewById(R.id.task_content))
                     .getText().toString();
+            Log.d("slot", slotContent);
             if (slotContent.length() != 0) {
-                // Insert day first into DB because foreign key constrain between day and slot
-                slotsViewModel.insertDay(dateLiveData.getValue());
                 List<ConstantSlot> constantSlots = slotInDayAdapter.getConstantSlots();
                 slotsViewModel.insertSlotInDay(dateLiveData.getValue(),
                         constantSlots.get(i).getTimeSlot(), slotContent);
@@ -196,8 +215,15 @@ public class SlotsListFragment extends Fragment {
             if (slotList.size() == 0) {
                 slotContentView.setText("");
             } else {
-                SlotInDay slot = slotList.get(position);
-                slotContentView.setText(slot.getTaskDescription());
+                LocalTime currSlot = constantSlot.getTimeSlot();
+                for (SlotInDay slot : slotList) {
+                    if (slot.getSlotTime().equals(currSlot)) {
+                        slotContentView.setText(slot.getTaskDescription());
+                    }
+                }
+                // slotList may be much less than the desire view columns
+//                SlotInDay slot = slotList.get(position);
+//                slotContentView.setText(slot.getTaskDescription());
             }
             return rowView;
 

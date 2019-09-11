@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import com.example.hourlyplanner.data.local.ConstantSlotDao;
-import com.example.hourlyplanner.data.local.DaysDao;
 import com.example.hourlyplanner.data.local.PlannerDataBase;
 import com.example.hourlyplanner.data.local.SlotDao;
 
@@ -20,7 +19,6 @@ public class PlannerRepository {
 
     private final PlannerDataBase localDataBase;
 
-    private final DaysDao daysDao;
 
     private final SlotDao slotDao;
 
@@ -28,7 +26,6 @@ public class PlannerRepository {
 
     private PlannerRepository(PlannerDataBase localDataBase) {
         this.localDataBase = localDataBase;
-        daysDao = localDataBase.daysDao();
         slotDao = localDataBase.slotsDao();
         constantSlotDao = localDataBase.constantSlotDao();
     }
@@ -40,17 +37,6 @@ public class PlannerRepository {
         return INSTANCE;
     }
 
-
-    public void insertDate(final LocalDate localDate) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                daysDao.insertDay(new Days(localDate));
-                return null;
-            }
-        }.execute();
-    }
 
     public void insertTimeSlot(LocalDate localDate, LocalTime localTime, String taskDescription) {
         SlotInDay slotInDay = new SlotInDay(localTime, taskDescription, localDate);
@@ -82,9 +68,6 @@ public class PlannerRepository {
         return constantSlotDao.getAllConstantSlot();
     }
 
-    public LiveData<Days> getDayByDate(LocalDate date) {
-        return daysDao.getDayByDate(date);
-    }
 
     public LiveData<List<SlotInDay>> getAllSlotsInDay(final LocalDate localDate) {
         return slotDao.getSlotsInDay(localDate);

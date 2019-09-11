@@ -36,6 +36,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="addnasdf"></Button>
+        android:id="@+id/save_all_button"
+        android:text="save all"></Button>
 
 </LinearLayout>

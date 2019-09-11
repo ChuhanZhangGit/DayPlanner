@@ -11,20 +11,18 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.hourlyplanner.data.ConstantSlot;
-import com.example.hourlyplanner.data.Days;
 import com.example.hourlyplanner.data.SlotInDay;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 
 
-@Database(entities = {Days.class, SlotInDay.class, ConstantSlot.class}, version = 1)
+@Database(entities = { SlotInDay.class, ConstantSlot.class}, version = 1)
 @TypeConverters({DateConverter.class, LocalTimeConverter.class})
 
 public abstract class PlannerDataBase extends RoomDatabase {
     private static volatile PlannerDataBase INSTANCE;
 
-    public abstract DaysDao daysDao();
 
     public abstract SlotDao slotsDao();
 
@@ -64,12 +62,10 @@ public abstract class PlannerDataBase extends RoomDatabase {
 
     private static class PopulateDBAsync extends AsyncTask<Void, Void, Void> {
 
-        private DaysDao daysDao;
         private SlotDao slotDao;
         private ConstantSlotDao constantSlotDao;
 
         public PopulateDBAsync(PlannerDataBase dataBase) {
-            daysDao = dataBase.daysDao();
             slotDao = dataBase.slotsDao();
             constantSlotDao = dataBase.constantSlotDao();
 
@@ -80,7 +76,6 @@ public abstract class PlannerDataBase extends RoomDatabase {
 
             // Populate the slots in day with predefined time.
             constantSlotDao.deleteAll();
-            daysDao.deleteAllDate();
 
             LocalTime start = LocalTime.of( 8,30,0) ;
             LocalTime stop = LocalTime.of( 17 , 0 , 0 ) ;
@@ -93,11 +88,9 @@ public abstract class PlannerDataBase extends RoomDatabase {
                 iterator = iterator.plusMinutes(60);
             }
 
-
             LocalDate someDate = LocalDate.now();
             String taskDescription = "random task";
 
-            daysDao.insertDay(new Days(someDate));
 
             iterator = start;
             int counter = 1;
